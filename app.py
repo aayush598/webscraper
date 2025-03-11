@@ -73,9 +73,30 @@ def update_college():
 
 @app.route("/get_colleges", methods=["GET"])
 def get_colleges():
+    state = request.args.get("state")
+    mode = request.args.get("mode")
+    college_type = request.args.get("type")
+    course = request.args.get("course")
+    
+    query = "SELECT * FROM colleges WHERE 1=1"
+    params = []
+    
+    if state and state != "All States":
+        query += " AND state = ?"
+        params.append(state)
+    if mode and mode != "All Modes":
+        query += " AND mode = ?"
+        params.append(mode)
+    if college_type and college_type != "All Types":
+        query += " AND type = ?"
+        params.append(college_type)
+    if course and course != "All Courses":
+        query += " AND courses LIKE ?"
+        params.append(f"%{course}%")
+    
     with sqlite3.connect("colleges.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM colleges")
+        cursor.execute(query, params)
         colleges = [dict(id=row[0], name=row[1], city=row[2], state=row[3], type=row[4], mode=row[5], courses=row[6]) for row in cursor.fetchall()]
     return jsonify(colleges)
 

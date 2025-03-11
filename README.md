@@ -6,8 +6,7 @@ This project is a Flask-based REST API for managing a college database using SQL
 
 - Add new colleges (ensures no duplicates)
 - Update existing college details
-- Retrieve all colleges
-- Get colleges by state
+- Retrieve all colleges based on filters (state, mode, type, and courses)
 - Uses SQLite for persistent storage
 
 ---
@@ -63,7 +62,7 @@ The server will start at **http://127.0.0.1:5000/**.
   "state": "Test State",
   "type": "Private",
   "mode": "Full Time",
-  "courses": "Engineering, Management"
+  "courses": "UG Courses, PG Courses"
 }
 ```
 
@@ -87,7 +86,7 @@ The server will start at **http://127.0.0.1:5000/**.
   "state": "Updated State",
   "type": "Public",
   "mode": "Part Time",
-  "courses": "Science, Arts"
+  "courses": "Diploma, PhD"
 }
 ```
 
@@ -98,9 +97,22 @@ The server will start at **http://127.0.0.1:5000/**.
 
 ---
 
-### **3️⃣ Get All Colleges**
+### **3️⃣ Get Colleges (With Filters)**
 
 #### `GET /get_colleges`
+
+**Query Parameters:**
+
+- `state` (optional) - Filter by state
+- `mode` (optional) - Filter by study mode (Full Time, Part Time, Correspondence)
+- `type` (optional) - Filter by college type (Private, Public, Public Private Partnership)
+- `course` (optional) - Filter by courses offered
+
+**Example Request:**
+
+```sh
+GET /get_colleges?state=Test%20State&type=Private&mode=Full%20Time&course=Engineering
+```
 
 **Response:**
 
@@ -113,31 +125,72 @@ The server will start at **http://127.0.0.1:5000/**.
     "state": "Test State",
     "type": "Private",
     "mode": "Full Time",
-    "courses": "Engineering, Management"
+    "courses": "UG Courses, PG Courses"
   }
 ]
 ```
 
 ---
 
-### **4️⃣ Get Colleges by State**
+## 🖥️ Example React Frontend Code
 
-#### `GET /get_colleges_by_state?state=Test State`
+```jsx
+import React, { useState, useEffect } from "react";
 
-**Response:**
+function CollegeList() {
+  const [colleges, setColleges] = useState([]);
 
-```json
-[
-  {
-    "id": 1,
-    "name": "Test College",
-    "city": "Test City",
-    "state": "Test State",
-    "type": "Private",
-    "mode": "Full Time",
-    "courses": "Engineering, Management"
-  }
-]
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/get_colleges")
+      .then((response) => response.json())
+      .then((data) => setColleges(data));
+  }, []);
+
+  return (
+    <div>
+      <h2>Colleges</h2>
+      <ul>
+        {colleges.map((college) => (
+          <li key={college.id}>
+            {college.name} - {college.state}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default CollegeList;
+```
+
+---
+
+## 🐍 Example Python API Code
+
+```python
+import requests
+
+BASE_URL = "http://127.0.0.1:5000"
+
+def add_college():
+    data = {
+        "name": "New College",
+        "city": "New City",
+        "state": "Maharashtra",
+        "type": "Public",
+        "mode": "Full Time",
+        "courses": "UG Courses, PhD"
+    }
+    response = requests.post(f"{BASE_URL}/add_college", json=data)
+    print(response.json())
+
+def get_colleges():
+    response = requests.get(f"{BASE_URL}/get_colleges")
+    print(response.json())
+
+if __name__ == "__main__":
+    add_college()
+    get_colleges()
 ```
 
 ---

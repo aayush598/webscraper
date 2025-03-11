@@ -83,20 +83,5 @@ class TestCollegeAPI(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(json.loads(response.data), list)
     
-    def test_get_colleges_by_state(self):
-        self.app.post("/add_college", data=json.dumps({
-            "name": "State College",
-            "city": "City1",
-            "state": "Specific State",
-            "type": "Private",
-            "mode": "Full Time",
-            "courses": "Medical"
-        }), content_type="application/json")
-        
-        response = self.app.get("/get_colleges_by_state?state=Specific%20State")
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.data)
-        self.assertTrue(any(college["state"] == "Specific State" for college in data))
-    
 if __name__ == "__main__":
     unittest.main()

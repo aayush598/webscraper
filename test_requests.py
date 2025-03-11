@@ -5,12 +5,12 @@ BASE_URL = "http://127.0.0.1:5000"
 
 def test_add_college():
     data = {
-        "name": "Test College",
+        "name": "Test College Assam2",
         "city": "Test City",
-        "state": "Test State",
+        "state": "Assam",
         "type": "Private",
         "mode": "Full Time",
-        "courses": "Engineering, Management"
+        "courses": "Diploma, Certificate"
     }
     response = requests.post(f"{BASE_URL}/add_college", json=data)
     print("Add College Response:", response.status_code, response.json())
@@ -60,10 +60,6 @@ def test_get_colleges():
     print("Get Colleges Response:", response.status_code, response.json())
     print("-"*50)
 
-def test_get_colleges_by_state():
-    response = requests.get(f"{BASE_URL}/get_colleges_by_state?state=Specific%20State")
-    print("Get Colleges by State Response:", response.status_code, response.json())
-    print("-"*50)
 
 if __name__ == "__main__":
     test_add_college()
@@ -71,4 +67,3 @@ if __name__ == "__main__":
     test_update_college()
     test_update_nonexistent_college()
     test_get_colleges()
-    test_get_colleges_by_state()
