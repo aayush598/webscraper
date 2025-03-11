@@ -17,8 +17,8 @@ This project is a Flask-based REST API for managing a college database using SQL
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone <repo-url>
-cd <repo-folder>
+git clone https://github.com/aayush598/webscraper
+cd webscraper
 ```
 
 ### 2️⃣ Create a Virtual Environment

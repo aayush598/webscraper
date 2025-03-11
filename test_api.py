@@ -1,6 +1,6 @@
 import unittest
 import json
-from main import app
+from app import app
 
 class TestCollegeAPI(unittest.TestCase):
     
